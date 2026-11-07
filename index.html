@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MS-STAV · Nový web – dotazník</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1ec;--card:#fff;--ink:#16181b;--muted:#6b6f76;--line:#e4dfd6;--accent:#c8862a;--accent-ink:#fff;--sel:#16181b;--radius:18px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+header{position:sticky;top:0;z-index:5;background:rgba(244,241,236,.92);backdrop-filter:blur(8px);padding:14px 18px 10px}
+.brand{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.brand span:last-child{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:500}
+.bar{height:4px;background:var(--line);border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s ease}
+main{flex:1;width:100%;max-width:560px;margin:0 auto;padding:8px 18px 120px}
+.screen{animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.part{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:18px 0 6px}
+h1{font-size:30px;line-height:1.15;margin:8px 0 12px;font-weight:800;letter-spacing:-.02em}
+h2{font-size:23px;line-height:1.25;margin:4px 0 8px;font-weight:800;letter-spacing:-.01em}
+p.hint{color:var(--muted);margin:0 0 18px;font-size:15px;line-height:1.5}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:16px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font:inherit;font-size:16px;font-weight:600;color:var(--ink);cursor:pointer;transition:all .15s}
+.opt .k{flex:none;width:28px;height:28px;border-radius:8px;border:1.5px solid var(--line);display:grid;place-items:center;font-size:13px;color:var(--muted)}
+.opt.on{border-color:var(--sel);background:var(--sel);color:#fff}
+.opt.on .k{border-color:rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.12)}
+.opt small{display:block;font-weight:500;color:var(--muted);font-size:13px;margin-top:2px}
+.opt.on small{color:rgba(255,255,255,.7)}
+.rate{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 14px 12px;margin-bottom:10px}
+.rate .lbl{font-weight:700;font-size:15px;margin-bottom:10px}
+.dots{display:flex;gap:6px}
+.dots button{flex:1;height:44px;border-radius:10px;border:1.5px solid var(--line);background:#faf8f5;font:inherit;font-weight:700;font-size:16px;color:var(--ink);cursor:pointer}
+.dots button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.dots button.na{font-size:12px;font-weight:600;color:var(--muted);flex:1.4}
+.dots button.na.on{background:var(--sel);border-color:var(--sel);color:#fff}
+.scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:-4px 2px 14px}
+.tri{display:flex;gap:6px;margin-top:2px}
+.tri button{flex:1;height:40px;border-radius:10px;border:1.5px solid var(--line);background:#faf8f5;font:inherit;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink)}
+.tri button.on.y{background:#2f7a4b;border-color:#2f7a4b;color:#fff}
+.tri button.on.n{background:#9a3b2e;border-color:#9a3b2e;color:#fff}
+.tri button.on.m{background:var(--sel);border-color:var(--sel);color:#fff}
+textarea,input[type=text]{width:100%;border:1.5px solid var(--line);border-radius:14px;background:var(--card);padding:14px;font:inherit;font-size:16px;color:var(--ink);resize:vertical}
+textarea{min-height:120px}
+textarea:focus,input:focus{outline:none;border-color:var(--accent)}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:0 0 6px 2px}
+.styles{display:grid;gap:10px}
+.sty{border:1.5px solid var(--line);border-radius:16px;background:var(--card);padding:0;overflow:hidden;text-align:left;font:inherit;cursor:pointer;color:var(--ink)}
+.sty .sw{height:86px;display:flex;align-items:flex-end;padding:12px 14px;gap:8px}
+.sty .sw b{font-size:18px;font-weight:800;letter-spacing:-.01em}
+.sty .sw em{width:22px;height:22px;border-radius:50%;display:inline-block;border:2px solid rgba(255,255,255,.6)}
+.sty .t{padding:12px 14px;font-weight:700;font-size:15px}
+.sty .t small{display:block;font-weight:500;color:var(--muted);font-size:13px;margin-top:2px}
+.sty.on{border-color:var(--sel);box-shadow:0 0 0 3px var(--sel)}
+footer.nav{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:22px 18px calc(16px + env(safe-area-inset-bottom))}
+footer.nav .in{max-width:560px;margin:0 auto;display:flex;gap:10px}
+.btn{height:54px;border-radius:14px;border:0;font:inherit;font-size:16px;font-weight:700;cursor:pointer;padding:0 20px}
+.btn.pri{flex:1;background:var(--ink);color:#fff}
+.btn.pri:disabled{opacity:.35}
+.btn.sec{background:var(--card);border:1.5px solid var(--line);color:var(--ink)}
+.btn.acc{background:var(--accent);color:#fff;width:100%}
+.hero{margin-top:22px;border-radius:22px;padding:26px 22px;background:linear-gradient(135deg,#16181b,#2b2e33);color:#fff;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(200,134,42,.55),transparent 70%)}
+.hero h1{color:#fff;margin-top:0}
+.hero p{color:rgba(255,255,255,.75);line-height:1.55;margin:0 0 6px;font-size:15px}
+.meta{display:flex;gap:16px;margin-top:16px;font-size:13px;color:rgba(255,255,255,.7)}
+.meta b{color:#fff;display:block;font-size:18px}
+.sum{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:6px 16px;margin:14px 0}
+.sum div{padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.45}
+.sum div:last-child{border:0}
+.sum b{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:2px}
+.actions{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none}
+.wa{background:#1f8f4e;color:#fff}
+.note{font-size:13px;color:var(--muted);line-height:1.5;margin-top:12px}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span>MS-STAV · nový web</span><span id="count"></span></div>
+  <div class="bar"><i id="prog"></i></div>
+</header>
+<main id="app"></main>
+<footer class="nav" id="nav"><div class="in">
+  <button class="btn sec" id="back" aria-label="Späť">←</button>
+  <button class="btn pri" id="next">Ďalej</button>
+</div></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const SERVICES=["Stavebné práce","Zemné práce","Priemyselné podlahy","Stolárstvo a tesárstvo","Zámočníctvo a zváranie","Vodoinštalácia a kúrenie","Prenájom strojov a dopravy","Poradenstvo"];
+const Q=[
+ {id:"intro",type:"intro"},
+ {id:"goals",part:"Časť A · Rozhodnutia",type:"rate",title:"Čo má nový web priniesť?",hint:"Ohodnoť každý cieľ. 1 = málo dôležité, 5 = najdôležitejšie.",items:["Noví zákazníci na stavebné práce","Prenájom strojov","Zákazky na priemyselné podlahy","Noví zamestnanci","Dôveryhodnosť u partnerov a v tendroch"]},
+ {id:"customers",part:"Časť A · Rozhodnutia",type:"multi",title:"Koho chceš webom osloviť?",hint:"Vyber všetky, ktoré platia.",opts:["Súkromní investori (domy, chaty)","Firmy a priemysel","Obce a mestá","Developeri","Generálni dodávatelia (subdodávky)"]},
+ {id:"region",part:"Časť A · Rozhodnutia",type:"single",title:"V akom regióne chcete pracovať?",opts:["Orava","Žilinský kraj","Celé Slovensko","Slovensko + zahraničie"]},
+ {id:"services",part:"Časť A · Rozhodnutia",type:"rate",na:true,title:"Ktoré služby majú byť na webe najviac vidieť?",hint:"1 = okrajovo, 5 = hlavná služba. „Nerobíme“ = na web nedávať.",items:SERVICES},
+ {id:"newService",part:"Časť A · Rozhodnutia",type:"text",optional:true,title:"Robíte niečo, čo na súčasnom webe chýba?",hint:"Nepovinné. Stačí pár slov.",ph:"napr. demolácie, rekonštrukcie striech…"},
+ {id:"refsCount",part:"Časť A · Referencie",type:"single",title:"Ku koľkým zákazkám vieš dodať fotky a základné info?",hint:"Názov, miesto, rok a pár fotiek.",opts:["0 – 3","4 – 6","7 – 10","Viac ako 10"]},
+ {id:"refsNames",part:"Časť A · Referencie",type:"single",title:"Môžeme na webe uvádzať mená objednávateľov?",opts:["Áno, väčšinou","Len pri niektorých","Radšej nie"]},
+ {id:"flagship",part:"Časť A · Referencie",type:"text",optional:true,title:"Tvoje 3 najlepšie zákazky",hint:"Nepovinné. Stačí názov a miesto, detaily doplní asistentka.",ph:"1. …\n2. …\n3. …",area:true},
+ {id:"rentalPrice",part:"Časť A · Prenájom strojov",type:"single",title:"Ceny prenájmu strojov na webe…",opts:["Zobraziť ceny","Cena na vyžiadanie"]},
+ {id:"rentalOperator",part:"Časť A · Prenájom strojov",type:"single",title:"Stroje prenajímate…",opts:["Len so strojníkom","Aj bez strojníka","Podľa stroja"]},
+ {id:"logo",part:"Časť A · Vzhľad",type:"single",title:"Čo so súčasným logom?",opts:["Ponechať tak, ako je","Jemne osviežiť","Pokojne aj nové"]},
+ {id:"style",part:"Časť A · Vzhľad",type:"style",title:"Ktorý štýl je ti najbližší?",hint:"Len smer – detaily navrhnem ja. Prvé dva vychádzajú z vašej firemnej zelenej.",opts:[
+   {k:"Firemná zelená – svieža",d:"Biela, sýta zelená, svetlá mätová",bg:"linear-gradient(135deg,#ffffff,#e3efe0)",fg:"#1f5a2e",c:["#1f5a2e","#3f8a4f","#bcd9b5"]},
+   {k:"Firemná zelená – prémiová",d:"Tmavá lesná zelená, mosadz, veľké fotky",bg:"linear-gradient(135deg,#13301c,#24492f)",fg:"#e2cf9e",c:["#13301c","#4f7a58","#c2a36b"]},
+   {k:"Svetlý a vzdušný",d:"Biela, oceľová sivá, oranžový akcent",bg:"linear-gradient(135deg,#ffffff,#e9ecef)",fg:"#1d2329",c:["#1d2329","#8a939c","#e07a1f"]},
+   {k:"Robustný a technický",d:"Betónová sivá, čierna, žltá",bg:"linear-gradient(135deg,#8c8c88,#4a4a47)",fg:"#fff",c:["#111","#bdbdb6","#f2c200"]},
+   {k:"Prémiový a tmavý",d:"Antracit, bronz, veľké fotky",bg:"linear-gradient(135deg,#1a1c1f,#34302b)",fg:"#e9d8b8",c:["#1a1c1f","#5b544b","#b88a4a"]},
+   {k:"Nechám na tebe",d:"Martin navrhne a ukáže",bg:"repeating-linear-gradient(45deg,#f4f1ec 0 12px,#ebe5da 12px 24px)",fg:"#16181b",c:[]}]},
+ {id:"ceoPhoto",part:"Časť A · Ľudia",type:"single",title:"Tvoja fotka a krátky odkaz konateľa na webe?",opts:["Áno","Nie"]},
+ {id:"contacts",part:"Časť A · Ľudia",type:"single",title:"Kontakty na webe…",opts:["Kontaktné osoby s menom a fotkou","Len všeobecný kontakt firmy"]},
+ {id:"inquiries",part:"Časť A · Dopyty",type:"fields",optional:true,title:"Kam majú chodiť dopyty z webu?",hint:"Nepovinné, ak to má byť ako doteraz.",fields:[["email","E-mail"],["phone","Telefón"],["who","Kto ich bude vybavovať"]]},
+ {id:"companyEmail",part:"Časť A · Dopyty",type:"single",title:"Firemný e-mail namiesto Gmailu?",hint:"napr. info@msstav.sk",opts:["Áno, chcem firemný e-mail","Ostať pri Gmaile","Poraď mi"]},
+ {id:"languages",part:"Časť A · Jazyky",type:"multi",exclusive:"Len slovenčina",title:"V akých jazykoch má byť web?",hint:"Slovenčina je vždy.",opts:["Len slovenčina","Angličtina","Nemčina","Poľština","Čeština"]},
+ {id:"hiring",part:"Časť A · Nábor",type:"single",title:"Hľadáte teraz ľudí?",opts:["Áno","Občas","Nie"]},
+ {id:"trades",part:"Časť A · Nábor",type:"multi",when:a=>a.hiring&&a.hiring!=="Nie",title:"Ktoré profesie?",opts:["Murár","Tesár","Stolár","Zvárač / zámočník","Strojník","Vodoinštalatér","Vodič"]},
+ {id:"approver",part:"Časť A · Schvaľovanie",type:"single",title:"Kto bude schvaľovať texty a fotky?",opts:["Ja","Asistentka","Iná poverená osoba"]},
+ {id:"deadline",part:"Časť A · Termín",type:"single",title:"Kedy by sa nový web hodil?",opts:["Čo najskôr","Do 3 mesiacov","Bez termínu","Ku konkrétnej príležitosti"],other:"Ku konkrétnej príležitosti"},
+ {id:"materials",part:"Časť B · Podklady",type:"tri",title:"Čo z toho máte k dispozícii?",hint:"Rýchly prehľad. Samotné súbory pošle asistentka.",items:["Logo v dobrej kvalite","Fotky zákaziek","Zoznam strojov s parametrami","Certifikát SIKA","ISO certifikáty","Fotky budovy, dielní a strojov","Prospekty / prezentácie","Prístup k doméne msstav.sk"]},
+ {id:"who",part:"Časť B · Podklady",type:"single",title:"Kto pripraví podklady?",hint:"Pošlem podrobný zoznam a zdieľaný priečinok.",opts:["Pošlem sám","Pripraví asistentka"],other:"Pripraví asistentka",otherLabel:"Meno a kontakt na asistentku"},
+ {id:"done",type:"done"}
+];
+const KEY="msstav-form-v1";
+let A={},i=0;
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s){A=s.A||{};i=s.i||0}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({A,i}))}catch(e){}};
+const visible=()=>Q.filter(q=>!q.when||q.when(A));
+const $=s=>document.querySelector(s);
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.textContent=h;return e};
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1800)}
+function answered(q){const v=A[q.id];
+ if(q.optional||q.type==="intro"||q.type==="done")return true;
+ if(q.type==="single"||q.type==="style")return !!v;
+ if(q.type==="multi")return v&&v.length>0;
+ if(q.type==="rate"||q.type==="tri")return v&&q.items.every(x=>v[x]!=null);
+ return true}
+function go(d){const vs=visible();let idx=vs.indexOf(Q[i]);idx=Math.max(0,Math.min(vs.length-1,idx+d));i=Q.indexOf(vs[idx]);save();render();window.scrollTo({top:0,behavior:"smooth"})}
+function render(){
+ const vs=visible();if(!vs.includes(Q[i]))i=Q.indexOf(vs[0]);
+ const q=Q[i],idx=vs.indexOf(q),total=vs.length-2;
+ $("#prog").style.width=Math.max(0,Math.min(100,(idx/(vs.length-1))*100))+"%";
+ $("#count").textContent=(q.type==="intro"||q.type==="done")?"":idx+" / "+total;
+ const app=$("#app");app.innerHTML="";const s=el("div","screen");app.appendChild(s);
+ const nav=$("#nav"),next=$("#next"),back=$("#back");
+ nav.style.display=q.type==="done"?"none":"";back.style.display=idx===0?"none":"";
+ next.textContent=q.type==="intro"?"Začať":(idx===vs.length-2?"Dokončiť":"Ďalej");
+ if(q.type==="intro"){
+  const h=el("div","hero");h.appendChild(el("h1",null,"Ahoj Stano 👋"));
+  h.appendChild(el("p",null,"Pár otázok k novému webu MS-STAV. Väčšinou len ťukneš na odpoveď – žiadne písanie."));
+  h.appendChild(el("p",null,"Z odpovedí pripravím ukážku nového webu. Odpovede sa ti priebežne ukladajú, kľudne sa vráť neskôr."));
+  const m=el("div","meta");m.innerHTML="<div><b>~5 min</b>čas</div><div><b>"+total+"</b>otázok</div><div><b>2</b>časti</div>";h.appendChild(m);s.appendChild(h);
+  s.appendChild(el("p","note","Časť A sú rozhodnutia pre teba. Časť B je rýchly prehľad podkladov – samotné súbory potom pripraví asistentka."));
+ } else if(q.type==="done"){renderDone(s);return}
+ else{
+  if(q.part)s.appendChild(el("div","part",q.part));
+  s.appendChild(el("h2",null,q.title));if(q.hint)s.appendChild(el("p","hint",q.hint));
+  ({single:rSingle,multi:rMulti,rate:rRate,tri:rTri,text:rText,fields:rFields,style:rStyle})[q.type](s,q);
+ }
+ next.disabled=!answered(q);
+}
+function refresh(q){$("#next").disabled=!answered(q);save()}
+function rSingle(s,q){const w=el("div","opts");q.opts.forEach((o,n)=>{const b=el("button","opt"+(A[q.id]===o?" on":""));b.appendChild(el("span","k",String.fromCharCode(65+n)));b.appendChild(el("span",null,o));
+ b.onclick=()=>{A[q.id]=o;save();if(q.other===o){render();return}render();setTimeout(()=>go(1),260)};w.appendChild(b)});s.appendChild(w);
+ if(q.other&&A[q.id]===q.other){const f=el("div","field");f.style.marginTop="14px";f.appendChild(el("label",null,q.otherLabel||"Aká príležitosť?"));const inp=el("input");inp.type="text";inp.value=A[q.id+"_x"]||"";inp.oninput=()=>{A[q.id+"_x"]=inp.value;save()};f.appendChild(inp);s.appendChild(f)}}
+function rMulti(s,q){const w=el("div","opts");const v=A[q.id]||[];q.opts.forEach((o,n)=>{const on=v.includes(o);const b=el("button","opt"+(on?" on":""));b.appendChild(el("span","k",on?"✓":""));b.appendChild(el("span",null,o));
+ b.onclick=()=>{let c=A[q.id]||[];if(c.includes(o))c=c.filter(x=>x!==o);else{if(q.exclusive===o)c=[o];else c=c.filter(x=>x!==q.exclusive).concat(o)}A[q.id]=c;save();render()};w.appendChild(b)});s.appendChild(w)}
+function rRate(s,q){s.appendChild(Object.assign(el("div","scale"),{innerHTML:"<span>1 · málo</span><span>5 · najviac</span>"}));const v=A[q.id]=A[q.id]||{};
+ q.items.forEach(it=>{const r=el("div","rate");r.appendChild(el("div","lbl",it));const d=el("div","dots");
+  if(q.na){const b=el("button","na"+(v[it]===0?" on":""),"Nerobíme");b.onclick=()=>{v[it]=0;render()};d.appendChild(b)}
+  [1,2,3,4,5].forEach(n=>{const b=el("button",v[it]===n?"on":"",n);b.onclick=()=>{v[it]=n;render()};d.appendChild(b)});r.appendChild(d);s.appendChild(r)})}
+function rTri(s,q){const v=A[q.id]=A[q.id]||{};q.items.forEach(it=>{const r=el("div","rate");r.appendChild(el("div","lbl",it));const d=el("div","tri");
+ [["Máme","y"],["Nemáme","n"],["Zistím","m"]].forEach(([t,c])=>{const b=el("button",c+(v[it]===t?" on":""),t);b.onclick=()=>{v[it]=t;render()};d.appendChild(b)});r.appendChild(d);s.appendChild(r)})}
+function rText(s,q){const t=el(q.area?"textarea":"input");if(!q.area)t.type="text";t.placeholder=q.ph||"";t.value=A[q.id]||"";t.oninput=()=>{A[q.id]=t.value;refresh(q)};s.appendChild(t)}
+function rFields(s,q){const v=A[q.id]=A[q.id]||{};q.fields.forEach(([k,l])=>{const f=el("div","field");f.appendChild(el("label",null,l));const inp=el("input");inp.type="text";inp.value=v[k]||"";inp.oninput=()=>{v[k]=inp.value;refresh(q)};f.appendChild(inp);s.appendChild(f)})}
+function rStyle(s,q){const w=el("div","styles");q.opts.forEach(o=>{const b=el("button","sty"+(A[q.id]===o.k?" on":""));const sw=el("div","sw");sw.style.background=o.bg;sw.style.color=o.fg;
+ const name=el("b",null,"MS-STAV");sw.appendChild(name);const sp=el("span");sp.style.flex="1";sw.appendChild(sp);o.c.forEach(c=>{const e=el("em");e.style.background=c;sw.appendChild(e)});
+ b.appendChild(sw);const t=el("div","t",o.k);t.appendChild(el("small",null,o.d));b.appendChild(t);b.onclick=()=>{A[q.id]=o.k;save();render();setTimeout(()=>go(1),300)};w.appendChild(b)});s.appendChild(w)}
+function fmt(q){const v=A[q.id];if(v==null||v===""||(Array.isArray(v)&&!v.length))return "—";
+ if(q.type==="rate")return q.items.map(x=>x+": "+(v[x]===0?"nerobíme":v[x]??"—")).join("\n");
+ if(q.type==="tri")return q.items.map(x=>x+": "+(v[x]||"—")).join("\n");
+ if(q.type==="fields"){const r=q.fields.filter(([k])=>v[k]).map(([k,l])=>l+": "+v[k]);return r.length?r.join("\n"):"—"}
+ if(Array.isArray(v))return v.join(", ");
+ return v+(A[q.id+"_x"]?" ("+A[q.id+"_x"]+")":"")}
+function textOut(){let t="MS-STAV – nový web: odpovede\n";visible().filter(q=>q.title).forEach(q=>{t+="\n• "+q.title+"\n"+fmt(q)+"\n"});return t}
+function renderDone(s){
+ const h=el("div","hero");h.appendChild(el("h1",null,"Hotovo, ďakujem! 🙌"));h.appendChild(el("p",null,"Posledný krok: pošli mi odpovede jedným ťuknutím."));s.appendChild(h);
+ const a=el("div","actions");
+ const wa=el("a","btn wa","Poslať cez WhatsApp");wa.href="https://wa.me/?text="+encodeURIComponent(textOut());wa.target="_blank";wa.rel="noopener";a.appendChild(wa);
+ const cp=el("button","btn acc","Kopírovať odpovede");cp.onclick=async()=>{try{await navigator.clipboard.writeText(textOut());toast("Skopírované – vlož do správy Martinovi")}catch(e){toast("Kopírovanie nefunguje – označ text nižšie")}};a.appendChild(cp);
+ const bk=el("button","btn sec","← Upraviť odpovede");bk.onclick=()=>go(-1);a.appendChild(bk);s.appendChild(a);
+ s.appendChild(el("p","note","WhatsApp sa otvorí s pripravenou správou – vyber Martina a odošli."));
+ const sum=el("div","sum");visible().filter(q=>q.title).forEach(q=>{const d=el("div");d.appendChild(el("b",null,q.title));const p=el("span");p.style.whiteSpace="pre-line";p.textContent=fmt(q);d.appendChild(p);sum.appendChild(d)});s.appendChild(sum);
+}
+$("#next").onclick=()=>go(1);$("#back").onclick=()=>go(-1);
+render();
+</script>
+</body>
+</html>
